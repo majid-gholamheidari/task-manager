@@ -15,6 +15,7 @@ class AuthenticationController extends MainController
 {
 
     /**
+     * Login user
      * @param LoginRequest $request
      * @return JsonResponse
      */
@@ -28,6 +29,7 @@ class AuthenticationController extends MainController
     }
 
     /**
+     * Register new user
      * @param RegisterRequest $request
      * @return JsonResponse
      */
@@ -38,7 +40,16 @@ class AuthenticationController extends MainController
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password'))
         ]);
-        $result = ['user_token' => $user->createToken($this->createUserToken($user))->plainTextToken];
-        return $this->easyResponse(true, $result, 200, 'Well done. Your account created successfully.');
+        return $this->easyResponse(true, new UserResource($user), 200, 'Well done. Your account created successfully.');
+    }
+
+    /**
+     * Sign out method
+     * @return JsonResponse
+     */
+    public function logout()
+    {
+        Auth::user()->tokens()->delete();
+        return $this->easyResponse(true, [], 200, 'You have been signed out. Come Back soon pls :)');
     }
 }
