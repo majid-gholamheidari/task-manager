@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Requests\Api\V1\Authentication\LoginRequest;
 use App\Http\Requests\Api\V1\Authentication\RegisterRequest;
+use App\Http\Resources\Api\V1\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -22,8 +23,8 @@ class AuthenticationController extends MainController
         if (!Auth::attempt($request->only(['email', 'password'])))
             return $this->easyResponse(false, [], 401, 'Sorry... but we have no user with this email and password!');
         $user = User::where('email', $request->get('email'))->first();
-        $result = ['user_token' => $user->createToken($this->createUserToken($user))->plainTextToken];
-        return $this->easyResponse(true, $result, 200, 'Welcome back ' . $user->name);
+        $user->tokens()->delete();
+        return $this->easyResponse(true, new UserResource($user), 200, 'Welcome back ' . $user->name);
     }
 
     /**
@@ -39,14 +40,5 @@ class AuthenticationController extends MainController
         ]);
         $result = ['user_token' => $user->createToken($this->createUserToken($user))->plainTextToken];
         return $this->easyResponse(true, $result, 200, 'Well done. Your account created successfully.');
-    }
-
-    /**
-     * @param User $user
-     * @return string
-     */
-    private function createUserToken(User $user): string
-    {
-        return "API_TOKEN_V1_" . $user->email . '_' . now()->timestamp;
     }
 }
