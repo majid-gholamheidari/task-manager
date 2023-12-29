@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Api\V1\AuthenticationController;
 use App\Http\Controllers\Api\V1\BoardController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\Api\V1\MemberController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,6 +29,16 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'board', 'middleware' => 'auth:sanctum'], function () {
         Route::post('/index', [BoardController::class, 'index']);
         Route::post('/store', [BoardController::class, 'store']);
-        Route::post('/update/{board_code}', [BoardController::class, 'update']);
+        Route::post('/{board_code}/update', [BoardController::class, 'update']);
+
+        // Members routes
+        Route::group(['prefix' => 'member'], function () {
+            Route::post('{board_code}/index', [MemberController::class, 'index']);
+            Route::post('{board_code}/store', [MemberController::class, 'store']);
+        });
     });
+});
+
+Route::middleware('auth:sanctum')->post('dd', function () {
+    dd(\Illuminate\Support\Facades\Auth::user()->accessTo('VM'));
 });
