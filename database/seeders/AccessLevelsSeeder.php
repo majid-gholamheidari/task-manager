@@ -61,6 +61,10 @@ class AccessLevelsSeeder extends Seeder
             [
                 'title' => 'UB',
                 'description' => 'Access update board information.'
+            ],
+            [
+                'title' => 'DM',
+                'description' => 'Access to disable member of the board.'
             ]
         ];
 

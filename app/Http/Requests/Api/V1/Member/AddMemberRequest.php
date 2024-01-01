@@ -29,11 +29,15 @@ class AddMemberRequest extends FormRequest
             ],
             'access_level' => [
                 'required',
+                'array',
+            ],
+            'access_level.*' => [
                 'exists:access_levels,title'
             ],
             'expiration' => [
-//                'nullable',
-//                'tim'
+                'nullable',
+                'date_format:Y/m/d H:i',
+                'after_or_equals:' . now()->format('Y/m/d H:i')
             ]
         ];
     }

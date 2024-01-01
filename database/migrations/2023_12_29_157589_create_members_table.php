@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->foreignId('board_id')->references('id')->on('boards');
-            $table->foreignId('access_level_id')->references('id')->on('access_levels');
             $table->foreignId('user_id')->references('id')->on('users');
+            $table->text('access_level')->nullable();
             $table->dateTime('expiration')->nullable();
             $table->timestamps();
         });
