@@ -14,7 +14,7 @@ class User extends Authenticatable
 
     const Active = "active";
     const Inactive = "inactive";
-    const Avatar = "/avatars/default.jpg";
+    const Avatar = "/avatars/default.png";
     /**
      * The attributes that are mass assignable.
      *
